@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.sheep4cloud.common.meilisearch.configuration.MeiliSearchAutoConfiguration

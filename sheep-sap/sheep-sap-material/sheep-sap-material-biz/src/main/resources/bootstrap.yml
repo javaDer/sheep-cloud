@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: sheep-sap-material-biz-server
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.1.20:8848
+        namespace: dev
+        username: nacos
+        password: nacos
+server:
+  port: 10088
+  undertow:
+    accesslog:
+      enabled: true
+    threads:
+      io: 2
+      worker: 256
+    max-http-post-size: 4MB
+    buffer-size: 1024
+    direct-buffers: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+    shutdown:
+      enabled: false

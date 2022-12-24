@@ -1,0 +1,98 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  datasource:
+    url: jdbc:mysql://192.168.1.20:3306/mall?useSSL=false&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: zhaofa
+    password: zhaofa123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      # 连接池最大连接数
+      maximum-pool-size: 50
+      # 空闲时保持最小连接数
+      minimum-idle: 50
+      # 空闲连接存活时间
+      idle-timeout: 300000
+      # 连接超时时间
+      connection-timeout: 20000
+      # 测试sql
+      connection-test-query: select 1
+      max-lifetime: 900000
+  redis:
+    database: 0
+    host: 192.168.1.20
+    port: 6379
+    #    password: g0w?oc|[6qTyy!bpkieDio\giuiwixcd
+    timeout: 5000
+    jedis:
+      pool:
+        max-wait: -1
+        max-idle: -200
+  jackson:
+    # 设置属性命名策略,对应jackson下PropertyNamingStrategy中的常量值，SNAKE_CASE-返回的json驼峰式转下划线，json body下划线传到后端自动转驼峰式
+    property-naming-strategy: SNAKE_CASE
+    # 全局设置@JsonFormat的格式pattern
+    date-format: yyyy-MM-dd HH:mm:ss
+    # 当地时区
+    locale: zh
+    # 设置全局时区
+    time-zone: GMT+8
+    # 常用，全局设置pojo或被@JsonInclude注解的属性的序列化方式
+    default-property-inclusion: NON_NULL #不为空的属性才会序列化,具体属性可看JsonInclude.Include
+    # 常规默认,枚举类SerializationFeature中的枚举属性为key，值为boolean设置jackson序列化特性,具体key请看SerializationFeature源码
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true # 返回的java.util.date转换成timestamp
+      FAIL_ON_EMPTY_BEANS: true # 对象为空时是否报错，默认true
+    # 枚举类DeserializationFeature中的枚举属性为key，值为boolean设置jackson反序列化特性,具体key请看DeserializationFeature源码
+    deserialization:
+      # 常用,json中含pojo不存在属性时是否失败报错,默认true
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+    # 枚举类MapperFeature中的枚举属性为key，值为boolean设置jackson ObjectMapper特性
+    # ObjectMapper在jackson中负责json的读写、json与pojo的互转、json tree的互转,具体特性请看MapperFeature,常规默认即可
+    mapper:
+      # 使用getter取代setter探测属性，如类中含getName()但不包含name属性与setName()，传输的vo json格式模板中依旧含name属性
+      USE_GETTERS_AS_SETTERS: true #默认false
+    # 枚举类JsonParser.Feature枚举类中的枚举属性为key，值为boolean设置jackson JsonParser特性
+    # JsonParser在jackson中负责json内容的读取,具体特性请看JsonParser.Feature，一般无需设置默认即可
+    parser:
+      ALLOW_SINGLE_QUOTES: true # 是否允许出现单引号,默认false
+    # 枚举类JsonGenerator.Feature枚举类中的枚举属性为key，值为boolean设置jackson JsonGenerator特性，一般无需设置默认即可
+    # JsonGenerator在jackson中负责编写json内容,具体特性请看JsonGenerator.Feature
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    auto-mapping-behavior: full
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:mapper/*Mapper.xml
+  global-config:
+    # 逻辑删除配置
+    db-config:
+      # 删除前
+      logic-not-delete-value: 1
+      # 删除后
+      logic-delete-value: 0
+pagehelper:
+  helperDialect: mysql                           #分页插件方言选择
+  reasonable: false                               #合理化参数，设为true时pageNum<=0 时会查第一页， pageNum>pages （超过总数时），会查询最后一页
+  supportMethodsArguments: true
+meilisearch:
+  url: http://192.168.1.20:7700
+  api-key: cG0Mz2vakr30o33
+logback:
+  log-home: /u01/
+  project-name: sheep-sap-material-biz-server
+baseUrl:
+  movies: https://docs.meilisearch.com/
+retrofit:
+  # 日志打印拦截器
+  logging-interceptor: com.github.lianjiatech.retrofit.spring.boot.interceptor.DefaultLoggingInterceptor
+  global-converter-factories:
+    - com.github.lianjiatech.retrofit.spring.boot.core.BasicTypeConverterFactory
+    - retrofit2.converter.jackson.JacksonConverterFactory
+  global-log:
+    enable: true
+    log-level: debug
+    log-strategy: basic
