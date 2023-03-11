@@ -1,0 +1,20 @@
+#cloud-config
+ssh_authorized_keys:
+## Note: Replace with your own public key
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCU/xLQcOco8u0s8kBzhP0qpjJc6v2UTPrB67bcTFB126UPvmAsct/X0qy39CibCAaUG3Gl3un0nLCi35hJxMa3G+aNi2/8MedI4xDcsh4c94eG5QNLNeUiAk3OLG05lSWhEeap0zr+eNNB+969jWm7gZNGPJ1ci3DtLvgNNZCKo7OYaVbOdKsxEa1G8ESzZ/9MhkuTsGtbunbKXYcIFU1pa/Ro+ug1SOqR9AgBQUljwLJM5jou3+bdhdHEMbB2F7DOjfNbF8suek1q+5lsauv1jw76DTzU2CI5D/fD18BAB5Kg6kObvUdMic47W4NhMDxVqAnrEzDUfJxnYc8zjqTR8+cebDSxTODpix/YRMKlE2RJEINJAsJf8I9SyUaD4cnLBb/lB9JFHQAfcFBhNieLpFGi23bRl3UdLrMUjwsu+eEFQcnmFp9p2IzYUTnI1Bw/JGKTb7b9IRFBR7aD2fpGIoxg7+ZoSkcJU/BWMUrST4TsuaI/tO6ohPdGfTWODrs= fa20091001@163.com
+
+package_update: true
+
+packages:
+ - runc
+ - git
+
+runcmd:
+- curl -sfL https://raw.githubusercontent.com/openfaas/faasd/master/hack/install.sh | bash -s -
+- systemctl status -l containerd --no-pager
+- journalctl -u faasd-provider --no-pager
+- systemctl status -l faasd-provider --no-pager
+- systemctl status -l faasd --no-pager
+- curl -sSLf https://cli.openfaas.com | sh
+- sleep 60 && journalctl -u faasd --no-pager
+- cat /var/lib/faasd/secrets/basic-auth-password | /usr/local/bin/faas-cli login --password-stdin
